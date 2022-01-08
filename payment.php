@@ -1,15 +1,20 @@
+
 <?php
     session_start();
+   
     $url = 'https://api.paymongo.com/v1/sources';
     // $data = array('key1' => 'value1', 'key2' => 'value2');
 
+    // changeable
     $public_key = 'pk_test_dDMnoENhY29bNe44tEajyA8E';
     $secret_key = 'sk_test_ZMMN26Bfi8f36XFZVRk6Q5Nr';
 
     $data =[ "data" => [
             "attributes" => [
+                //changeable
                 "amount" => (float)($_SESSION['current_product_price'])*100,
                 "redirect" => array(
+                    // success and invalid page changeable
                     "success" => "http://localhost/infinitegreen/success-payment.php",
                     "failed" => "http://localhost/infinitegreen/invalid-payment.php",
                 ),
@@ -42,8 +47,12 @@
     curl_close($curl);
     $json_a=json_decode($resp,true);    
     
-    echo $_SESSION['current_gcash_source_id'] = $json_a['data']['id'];
+    if( (float)($_SESSION['current_product_price']) >= 100 ){
+    $_SESSION['current_gcash_source_id'] = $json_a['data']['id'];
+    //changeable
     $_SESSION['current_gcash_product_description'] = $json_a['data']['attributes']['billing']['name'] . $json_a['data']['attributes']['created_at'];
+}
+    // var_dump($resp);    
     // echo 'Status: ' . $json_a['data']['attributes']['status'];
     
     // header('location: ' . $json_a['data']['attributes']['redirect']['checkout_url']);
@@ -67,7 +76,9 @@
 <body>
 
 <div class="container">       
-  <table class="table table-bordered">
+    <?php  if( (float)($_SESSION['current_product_price']) >= 100 )
+    {  ?>
+  <table class="table table-bordered">      
     <tbody>
         <tr>
             <th>Order</th>
@@ -92,6 +103,14 @@
         </tr>  
     </tbody>
   </table>
+  <?php }
+  else {
+    ?>
+    <h3>Amount cannot be less than 100.00</h3>
+        <a href="http://localhost/infinitegreen\index1.php" class="btn btn-primary">Back to Home</a>
+    <?php
+  }
+  ?>  
 </div>
 
 </body>

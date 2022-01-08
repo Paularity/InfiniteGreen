@@ -8,12 +8,15 @@
 
     $data =[ "data" => [
             "attributes" => [
+                // changeable
                 "amount" => (float)($_SESSION['current_product_price'])*100,
                 "source" => [
                     "id" => $_SESSION['current_gcash_source_id'],
                     "type" => "source"
                 ],
+                //changeable
                 "description" => $_SESSION['current_gcash_product_description'],
+                //changeable
                 "statement_descriptor" => $_SESSION['current_gcash_product_description'],                
                 "currency" => "PHP",
             ]

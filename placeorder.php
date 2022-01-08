@@ -44,7 +44,7 @@
             $resultUser = mysqli_query($connect,$sqlUser);
             $rowUser = mysqli_fetch_assoc($resultUser);	
             	
-            $address = $rowUser['address'];
+            $address = $rowProd['address'];
        
             $sqlProd = "SELECT * FROM producttb WHERE product_id = '$productId'";
             $resultProd = mysqli_query($connect,$sqlProd);
