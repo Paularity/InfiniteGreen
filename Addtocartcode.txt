@@ -1,0 +1,27 @@
+	if(isset($_SESSION["usersuid"])){
+	 	if (isset($_POST['add'])){
+			$_SESSION['productid']=$_POST['product_id'];
+			$id = $_SESSION['productid'];
+			$buyer = $_SESSION['usersuid'];
+				include 'includes/config.inc.php';
+     	  		$sql = "SELECT exists(select * from cart where product_id = '$id' and product_buyer='$buyer') AS Output;";
+     		   	$result = mysqli_query($connect,$sql);
+				if($row = mysqli_fetch_assoc($result)){
+			
+					if($row['Output']==0){
+						$sql = "SELECT * FROM producttb where product_id = $id";
+						$result = mysqli_query($connect,$sql);
+						$row = mysqli_fetch_assoc($result);
+
+						$sqli = "INSERT INTO cart (product_id, product_name, product_price, product_image, product_buyer, product_seller) 
+						VALUES ('$id', '".$row['product_name']."','".$row['product_price']."','".$row['product_image']."', '$buyer','".$row['seller']."')";
+						$result = mysqli_query($connect,$sqli);
+						echo "<script>alert('Product is added in the cart..!')</script>";
+						echo "<script>window.location = 'allproducts.php'</script>";
+					}else{
+						echo "<script>alert('Product is already added in the cart..!')</script>";
+						echo "<script>window.location = 'allproducts.php'</script>";
+					}
+				}		
+		}
+	
